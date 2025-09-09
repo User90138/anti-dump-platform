@@ -40,4 +40,18 @@ export class ClaimController {
       service: amount * 0.05,
     };
   }
+
+}
+// (псевдо-код)
+import { recoverSignerFromCampaignSignature } from "../services/SignatureService";
+
+async function submitClaim(req, res) {
+  const { signature, campaign, signerAddress } = req.body;
+
+  const recovered = recoverSignerFromCampaignSignature(signature, campaign);
+  if (recovered !== signerAddress.toLowerCase()) {
+    return res.status(400).json({ error: "Invalid signature" });
+  }
+
+  // дальше логика создания кампании / записи в базу и т.д.
 }
