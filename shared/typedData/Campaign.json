@@ -1,0 +1,16 @@
+{
+  "types": {
+    "Campaign": [
+      { "name": "airdropPercent", "type": "uint256" },
+      { "name": "lpPercent", "type": "uint256" },
+      { "name": "servicePercent", "type": "uint256" },
+      { "name": "feeCurrency", "type": "address" }
+    ]
+  },
+  "domain": {
+    "name": "Anti-Dump Platform",
+    "version": "1",
+    "chainId": 1,
+    "verifyingContract": "0x0000000000000000000000000000000000000000"
+  }
+}
