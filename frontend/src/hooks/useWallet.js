@@ -61,3 +61,36 @@ export const useWallet = () => {
 
   return { account, signEIP712 };
 };
+import typedData from "../../../shared/typedData/Campaign.json";
+import { ethers } from "ethers";
+
+/**
+ * provider - ethers provider (window.ethereum -> new ethers.providers.Web3Provider(window.ethereum))
+ * campaign - { airdropPercent, lpPercent, servicePercent, feeCurrency }
+ * returns { signature, signerAddress }
+ */
+export async function signCampaign(provider, campaign) {
+  const signer = provider.getSigner();
+
+  // Подстройка домена (можно переопределять через env)
+  const domain = {
+    ...typedData.domain,
+    chainId: Number(process.env.REACT_APP_CHAIN_ID || typedData.domain.chainId),
+    verifyingContract: process.env.REACT_APP_VERIFYING_CONTRACT || typedData.domain.verifyingContract
+  };
+
+  const types = typedData.types;
+
+  const message = {
+    airdropPercent: campaign.airdropPercent,
+    lpPercent: campaign.lpPercent,
+    servicePercent: campaign.servicePercent,
+    feeCurrency: campaign.feeCurrency
+  };
+
+  const signature = await signer._signTypedData(domain, types, message);
+  const signerAddress = await signer.getAddress();
+
+  return { signature, signerAddress, domain, types, message };
+}
+
